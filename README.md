@@ -1,4 +1,4 @@
-# Quasar App (weather-quasar)
+# Quasar App (weather-quasar) https://den-dev97.github.io/weather-quasar/dist/spa/#/
 
 A Quasar Framework app
 
