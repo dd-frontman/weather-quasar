@@ -1,10 +1,10 @@
 <template lang='pug'>
-q-page.flex.column(:class='day')
+q-page.flex.column(:class="[weatherData?.weather[0].icon.endsWith('n') ? 'bg-night' : 'bg-day']")
   .col.q-py-lg.q-px-lg
     q-input(v-model='search' @keyup.enter='getWeatherBySearch' label='Search your city' dark)
-      template(v-slot:prepend='')
+      template(v-slot:prepend)
         q-icon(name='place')
-      q-btn.cursor-pointer(round='' dense='' flat='' icon='search' @click='getWeatherBySearch')
+      q-btn.cursor-pointer(round dense flat icon='search' @click='getWeatherBySearch')
   .col.text-white.text-center
     .col.text-h2.text-weight-thin
       | Quasar
@@ -29,40 +29,48 @@ q-page.flex.column(:class='day')
 import { ref } from 'vue';
 import axios from 'axios';
 
-const search = ref('');
-const weatherData = ref(null);
-const lat = ref(0);
-const long = ref(0);
-const apiUrl = 'https://api.openweathermap.org/data/2.5/weather?';
-const apiKey = 'e97367c70002d8289087dc404664352d';
-const day = ref('');
+interface WeatherData {
+  name: string
+  weather: {
+    description: string
+    icon: string
+  }[]
+  main: {
+    temp: number
+  }
+}
 
-const getLocation = (() => {
-  return navigator.geolocation.getCurrentPosition(position => {
-    lat.value = position.coords.latitude;
-    long.value = position.coords.longitude;
-    getWeatherByCoords();
-  });
-});
-const getWeatherByCoords = (() => {
-  void axios(`${apiUrl}lat=${lat.value}&lon=${long.value}&appid=${apiKey}&units=metric`)
-    .then((response) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-return
-      weatherData.value = response.data;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      day.value = response.data.weather[0].icon.endsWith('n') ? 'bg-night' : 'bg-day';
-    }).catch(() => alert('Nothing found, try again later'));
+const search = ref('')
+const weatherData = ref<WeatherData | null>(null)
+const URL = 'https://api.openweathermap.org/data/2.5/weather?'
+const KEY = 'e97367c70002d8289087dc404664352d'
 
-});
-const getWeatherBySearch = (() => {
-  void axios(`${apiUrl}q=${search.value}&appid=${apiKey}&units=metric`)
-    .then((response) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,@typescript-eslint/no-unsafe-return
-      weatherData.value = response.data;
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      day.value = response.data.weather[0].icon.endsWith('n') ? 'bg-night' : 'bg-day';
-    }).catch(() => alert('Nothing found, enter again.'));
-});
+async function getWeather (url: string) {
+  try {
+    const { data } = await axios.get<WeatherData>(url);
+    weatherData.value = data;
+  } catch(e) {
+    console.log(e)
+    alert('Nothing found, enter again.')
+  }
+}
+
+async function getLocation () {
+  if (!navigator.geolocation) return;
+
+  const position = await new Promise<GeolocationPosition>((resolve, reject) =>
+    navigator.geolocation.getCurrentPosition(resolve, reject)
+  );
+
+  const { coords: { latitude, longitude } } = position;
+  const url = `${URL}lat=${latitude}&lon=${longitude}&appid=${KEY}&units=metric`;
+  await getWeather(url);
+}
+
+async function getWeatherBySearch () {
+  const url = `${URL}q=${search.value}&appid=${KEY}&units=metric`
+  await getWeather(url)
+}
 </script>
 
 <style lang='sass'>
