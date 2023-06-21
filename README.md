@@ -8,7 +8,7 @@
 * В скриптовой части, используется API OpenWeatherMap для получения данных о погоде. Сначала код получает местоположение пользователя или использует введенный в поле поиск город. Затем код отправляет запрос на сервер погоды и получает ответ, который включает в себя информацию о температуре, состоянии погоды и иконке погоды. Эти данные затем отображаются на странице.
 * Стилизация страницы меняется в зависимости от времени суток (день/ночь), что определяется по иконке погоды. Стили создают градиентный фон и делают круглыми углы иконки погоды.
 
-###[Ссылка на приложение](https://den-dev97.github.io/weather-quasar/dist/spa/#/ "weather-quasar")
+**[Ссылка на приложение](https://den-dev97.github.io/weather-quasar/dist/spa/#/ "weather-quasar")**
 
 ## Vue.js Weather Forecast Application using Quasar Framework. Styles are written in SASS preprocessor.
 
@@ -20,7 +20,7 @@
 * In the script part, OpenWeatherMap API is used to obtain weather data. The code first gets the user's location or uses the city entered in the search field. Then, the code sends a request to the weather server and gets a response, which includes information about temperature, weather condition, and weather icon. These data are then displayed on the page.
 * The page styling changes depending on the time of day (day/night), determined by the weather icon. The styles create a gradient background and round the corners of the weather icon.
 
-###[Link on app](https://den-dev97.github.io/weather-quasar/dist/spa/#/ "weather-quasar")
+**[Link on app](https://den-dev97.github.io/weather-quasar/dist/spa/#/ "weather-quasar")**
 
 ## Install the dependencies
 ```bash
